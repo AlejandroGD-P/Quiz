@@ -15,11 +15,24 @@ exports.load = function(req, res, next, quizId) {
 
 //GET /quizes
 exports.index = function(req, res) {
+
+	if(req.query.search){
+    	var filtro = req.query.search || '';// solo busca si pones algo
+    	filtro = filtro.replace(" ","%");//cambie también los espacios en blanco por %
+    	filtro = "%"+filtro+"%";//mostrará todas las preguntas que tengan "uno" seguido de "dos", independientemente de lo que haya entre "uno" y "dos".
+   		models.Quiz.findAll({where: ["pregunta like ?", filtro], order: 'pregunta ASC'}).then(
+    	  function(quizes) {
+    	    res.render('quizes/index', { quizes: quizes});
+    	  }
+  		).catch(function(error) { next(error);})
+    }else{
+
 	models.Quiz.findAll().then(
 		function(quizes){
 			res.render('quizes/index', {quizes: quizes});
 		}
 	).catch(function(error) { next(error);})
+	}
 };
 
 // GET /quizes/:id
@@ -35,5 +48,4 @@ exports.answer = function(req, res) {
 			resultado = 'Correcto';
 		}
 			res.render('quizes/answer',{quiz: req.quiz, respuesta: resultado});		
-		
 };
