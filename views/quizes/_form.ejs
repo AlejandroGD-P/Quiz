@@ -14,3 +14,9 @@
 
 <a href="/quizes"><button type="button">Cancelar</button></a>
 <input type="submit" value="Guardar">
+<script type="text/javascript">
+	mi_select = document.getElementById("tema");
+	console.log(mi_select.value);
+	console.log("<%= quiz.tema %>");
+	mi_select.value = "<%= quiz.tema %>";
+</script>
